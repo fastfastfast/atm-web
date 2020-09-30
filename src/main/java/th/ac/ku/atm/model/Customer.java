@@ -7,7 +7,6 @@ import javax.persistence.Id;
 public class Customer {
     @Id
     private int id;
-    
     private String name;
     private String pin;
     public Customer(int id, String name, String pin) {
@@ -42,5 +41,14 @@ public class Customer {
         this.pin = pin;
     }
 
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", pin='" + pin + '\'' +
+                '}';
+    }
 }
+
+
