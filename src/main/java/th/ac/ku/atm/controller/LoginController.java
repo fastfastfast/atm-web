@@ -17,35 +17,31 @@ public class LoginController {
     private CustomerService customerService;
     private BankAccountService bankAccountService;
 
-    public LoginController(CustomerService customerService,
-                           BankAccountService bankAccountService) {
+    public LoginController(CustomerService customerService, BankAccountService bankAccountService) {
         this.customerService = customerService;
         this.bankAccountService = bankAccountService;
     }
 
     @GetMapping
     public String getLoginPage() {
-        return "login";   // return login.html
+        return "login";
     }
 
     @PostMapping
     public String login(@ModelAttribute Customer customer, Model model) {
-        // 1. เอา id กับ pin ไปเช็คกับข้อมูล customer ที่มีอยู่ ว่าตรงกันบ้างไหม
+
+        // 1. check to see if id and pin matched customer info
         Customer matchingCustomer = customerService.checkPin(customer);
 
-        // 2. ถ้าตรง ส่งข้อมูล customer กลับไปแสดงผล
+        // 2. if match, welcome customer
         if (matchingCustomer != null) {
-            model.addAttribute("customertitle",
-                      matchingCustomer.getName() + " Bank Accounts");
-            model.addAttribute("bankaccount",
-                    bankAccountService.getCustomerBankAccount(customer.getId()));
+            model.addAttribute("customertitle", matchingCustomer.getName() + " Bank Accounts");
+            model.addAttribute("bankaccounts", bankAccountService.getCustomerBankAccounts(customer.getId()));
             return "customeraccount";
         } else {
-            // 3. ถ้าไม่ตรง แจ้งว่าไม่มีข้อมูล customer นี้
+            // 3. not match, display that customer info is incorrect
             model.addAttribute("greeting", "Can't find customer");
             return "home";
         }
-
     }
 }
-
