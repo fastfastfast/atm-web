@@ -9,16 +9,16 @@
 
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
-        <tr>
-            <th>Type</th>
-            <th>Balance</th>
-        </tr>
+            <tr>
+                <th>Type</th>
+                <th>Balance</th>
+            </tr>
         </thead>
         <tbody>
-        <tr th:each="account : ${bankaccounts}">
-            <td th:text="${account.type}"></td>
-            <td th:text="${account.balance}"></td>
-        </tr>
+            <tr th:each="account : ${bankaccounts}">
+                <td th:text="${account.type}"></td>
+                <td th:text="${account.balance}"></td>
+            </tr>
         </tbody>
     </table>
 </div>

@@ -1,5 +1,6 @@
 package th.ac.ku.atm.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,37 +18,49 @@ public class BankAccountController {
 
     @GetMapping
     public String getBankAccountPage(Model model) {
-        model.addAttribute("allBankAccounts",bankAccountService.getBankAccounts());
+        model.addAttribute("allBankAccounts",bankAccountService.getBankAccountList());
         return "bankaccount";
     }
 
     @PostMapping
     public String openBankAccount(@ModelAttribute BankAccount bankAccount, Model model) {
         bankAccountService.createBankAccount(bankAccount);
-        model.addAttribute("allBankAccounts", bankAccountService.getBankAccounts());
+        model.addAttribute("allBankAccounts", bankAccountService.getBankAccountList());
         return "redirect:bankaccount";
     }
 
-    @GetMapping("/edit/{id}")
-    public String getEditBankAccountPage(@PathVariable int id, Model model) {
-        BankAccount bankAccount = bankAccountService.getBankAccount(id);
-        model.addAttribute("bankAccount", bankAccount);
-        return "bankaccount-edit";
+    @GetMapping("/withdraw/{id}")
+    public String getWithdrawBankAccountPage(@PathVariable int id, Model model) {
+        BankAccount account = bankAccountService.getBankAccount(id);
+        model.addAttribute("bankAccount", account);
+        return "bankaccount-withdraw";
     }
 
-    @PostMapping("/edit/{id}")
-    public String depositAccount(@PathVariable int id, @ModelAttribute BankAccount bankAccount,
-                                 Model model, double amount, String btn) {
+    @GetMapping("/deposit/{id}")
+    public String getDepositBankAccountPage(@PathVariable int id, Model model) {
+        BankAccount account = bankAccountService.getBankAccount(id);
+        model.addAttribute("bankAccount", account);
+        return "bankaccount-deposit";
+    }
 
+//    @PostMapping("/edit/{id}")
+//    public String editAccount(@PathVariable int id, @ModelAttribute BankAccount bankAccount, Model model) {
+//        bankAccountService.editBankAccount(bankAccount);
+//        model.addAttribute("allBankAccounts", bankAccountService.getBankAccountList());
+//        return "redirect:/bankaccount";
+//    }
 
-        BankAccount record = bankAccountService.getBankAccount(bankAccount.getId());
-        if (btn.equals("deposit"))
-            record.setBalance(record.getBalance()+amount);
-        else if (btn.equals("withdraw"))
-            record.setBalance(record.getBalance()-amount);
-        bankAccountService.editBankAccount(record);
+    @PostMapping("/withdraw/{id}")
+    public String withdrawInAccount(@PathVariable int id, @ModelAttribute BankAccount bankAccount, Model model) {
+        bankAccountService.withdraw(id, bankAccount);
+        model.addAttribute("allBankAccounts", bankAccountService.getBankAccountList());
+        return "redirect:/bankaccount";
+    }
 
-        model.addAttribute("bankaccounts",bankAccountService.getBankAccounts());
+    @PostMapping("/deposit/{id}")
+    public String depositInAccount(@PathVariable int id, @ModelAttribute BankAccount bankAccount, Model model) {
+        bankAccountService.deposit(id, bankAccount);
+        model.addAttribute("allBankAccounts", bankAccountService.getBankAccountList());
         return "redirect:/bankaccount";
     }
 
@@ -55,7 +68,8 @@ public class BankAccountController {
     @PostMapping("/delete/{id}")
     public String deleteAccount(@PathVariable int id, @ModelAttribute BankAccount bankAccount, Model model) {
         bankAccountService.deleteBankAccount(bankAccount);
-        model.addAttribute("bankAccount", bankAccountService.getBankAccounts());
+        model.addAttribute("bankAccount", bankAccountService.getBankAccountList());
         return "redirect:/bankaccount";
+
     }
 }

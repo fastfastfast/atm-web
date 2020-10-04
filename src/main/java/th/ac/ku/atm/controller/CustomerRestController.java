@@ -21,7 +21,7 @@ public class CustomerRestController {
 
     @GetMapping
     public List<Customer> getAll() {
-        return customerService.getCustomers();
+        return customerService.getCustomerList();
     }
 
     @GetMapping("/{id}")
@@ -29,5 +29,5 @@ public class CustomerRestController {
         return customerService.findCustomer(id);
     }
 
-}
 
+}

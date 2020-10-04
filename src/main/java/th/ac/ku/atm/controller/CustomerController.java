@@ -1,4 +1,3 @@
-
 package th.ac.ku.atm.controller;
 
 import org.springframework.stereotype.Controller;
@@ -14,8 +13,6 @@ import th.ac.ku.atm.service.CustomerService;
 @RequestMapping("/customer")
 public class CustomerController {
 
-
-
     private CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
@@ -24,14 +21,18 @@ public class CustomerController {
 
     @GetMapping
     public String getCustomerPage(Model model) {
-        model.addAttribute("allCustomers", customerService.getCustomers());
-        return "customer";
+
+        model.addAttribute("allCustomers", customerService.getCustomerList());
+
+        return "customer";  // customer.html template
     }
 
     @PostMapping
     public String registerCustomer(@ModelAttribute Customer customer, Model model) {
+
         customerService.createCustomer(customer);
-        model.addAttribute("allCustomers", customerService.getCustomers());
+
+        model.addAttribute("allCustomers", customerService.getCustomerList());
         return "redirect:customer";
     }
 }
